@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+reports/*.html
+cache/
+.venv/
+venv/
