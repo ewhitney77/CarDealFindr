@@ -6,6 +6,8 @@ CarDealFindr command line.
   python cardealfindr.py run --apify              # also call the paid CarGurus actor this run
   python cardealfindr.py run --sources marketcheck,autodev
   python cardealfindr.py run --fixture tests/fixtures/sample_listings.json   # offline demo
+  python cardealfindr.py run --publish            # ...and update the web page at the Pages URL
+  python cardealfindr.py publish                  # push the latest report to the web page only
   python cardealfindr.py report                   # rebuild the HTML for the latest run
   python cardealfindr.py report --run-id 3 --top 50
   python cardealfindr.py history <VIN>            # every observation of one car
@@ -27,6 +29,7 @@ from dotenv import load_dotenv
 import config
 from cardealfindr.db import Database
 from cardealfindr.pipeline import ALL_SOURCES, run_pipeline
+from cardealfindr.publish import PublishError, publish_report, pages_url, settings_url
 from cardealfindr.report import build_report
 
 
@@ -89,8 +92,36 @@ def cmd_run(args) -> None:
         "dealer": r["dealer_name"], "mi": r["distance_miles"], "dom": r["days_on_market"], "flags": r["flags"],
     } for r in rows])
     print(f"\nreport: {os.path.abspath(path)}")
+    if args.publish:
+        _do_publish(path, run_id, args)
     if args.open:
         webbrowser.open(f"file://{os.path.abspath(path)}")
+    db.close()
+
+
+def _do_publish(path: str, run_id: int, args) -> None:
+    """Push the report to the Pages branch and print the URL."""
+    try:
+        res = publish_report(path, run_id, branch=args.branch, push=not args.no_push)
+    except PublishError as exc:
+        print(f"\npublish failed: {exc}")
+        return
+    where = "pushed to" if res["pushed"] else "committed locally on"
+    print(f"published: {where} branch {res['branch']} ({res['commit']})")
+    if res["url"]:
+        print(f"open it at: {res['url']}")
+        print(f"(first time only: turn Pages on at {res['settings']} -> "
+              f"Source: Deploy from a branch -> {res['branch']} / root)")
+
+
+def cmd_publish(args) -> None:
+    db = Database(config.DB_PATH)
+    run_id = args.run_id or db.latest_finished_run_id()
+    if run_id is None:
+        sys.exit("no completed runs yet - run `cardealfindr.py run` first")
+    path = build_report(db, run_id, top_n=args.top)
+    print(f"report for run {run_id}: {os.path.abspath(path)}")
+    _do_publish(path, run_id, args)
     db.close()
 
 
@@ -165,7 +196,18 @@ def main(argv=None) -> None:
     r.add_argument("--fixture", help="offline: load raw listings from a JSON file instead of APIs")
     r.add_argument("--top", type=int, default=config.REPORT_TOP_N)
     r.add_argument("--open", action="store_true", help="open the report in a browser when done")
+    r.add_argument("--publish", action="store_true",
+                   help="also push the report to the Pages branch so the web link updates")
+    r.add_argument("--branch", default="gh-pages", help="branch to publish to (default gh-pages)")
+    r.add_argument("--no-push", action="store_true", help="build the publish commit but do not push")
     r.set_defaults(func=cmd_run)
+
+    pb = sub.add_parser("publish", help="push the latest report to the Pages branch (updates the web link)")
+    pb.add_argument("--run-id", type=int)
+    pb.add_argument("--top", type=int, default=config.REPORT_TOP_N)
+    pb.add_argument("--branch", default="gh-pages")
+    pb.add_argument("--no-push", action="store_true")
+    pb.set_defaults(func=cmd_publish)
 
     rp = sub.add_parser("report", help="rebuild the HTML report for a run")
     rp.add_argument("--run-id", type=int)

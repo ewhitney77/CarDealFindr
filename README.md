@@ -75,6 +75,8 @@ python cardealfindr.py run --sources marketcheck          # exactly these source
 python cardealfindr.py run --no-dealers --no-cache        # skip scraping, ignore cache
 python cardealfindr.py run --debug-dealers                # dump fetched dealer pages to cache/dealer_debug/
 
+python cardealfindr.py run --publish       # ...and update the web page (see "A link you can bookmark")
+python cardealfindr.py publish             # push the latest report to the web page, nothing else
 python cardealfindr.py report              # rebuild reports/latest.html for the latest run
 python cardealfindr.py report --run-id 3 --top 50
 python cardealfindr.py history WA1LXBF70PD012345          # every observation of one VIN
@@ -96,6 +98,37 @@ Links are only real on a live run.
 
 Every run writes `reports/latest.html` plus a timestamped copy
 `reports/run_0007_20260913_1030.html`.
+
+---
+
+## 2a. A link you can bookmark
+
+`publish` puts the report on a `gh-pages` branch that GitHub serves as a web
+page, so you have one permanent URL instead of hunting for a file:
+
+**<https://ewhitney77.github.io/CarDealFindr/>**
+
+**One-time setup.** Open
+<https://github.com/ewhitney77/CarDealFindr/settings/pages>, set **Source** to
+*Deploy from a branch*, pick branch **gh-pages** and folder **/ (root)**, and
+save. The page goes live about a minute later. You only do this once.
+
+After that:
+
+```bash
+python cardealfindr.py run --publish     # search, score, and update the web page
+python cardealfindr.py publish           # just re-publish the latest report
+```
+
+The branch keeps `index.html` (always the newest report) plus one archived
+`run-0007.html` per run, so older reports stay reachable at
+`https://ewhitney77.github.io/CarDealFindr/run-0007.html`.
+
+Two things worth knowing. The repository is public, so anything on this branch
+is public: the report contains dealer listings and prices, nothing personal,
+and your `.env` keys are never part of it. And publishing never touches your
+working tree, so it is safe to run mid-edit; it builds the branch with git
+plumbing and pushes only that branch.
 
 ---
 
@@ -341,6 +374,7 @@ cardealfindr/
   pipeline.py                 collect -> merge by VIN -> filter -> score -> persist
   db.py                       SQLite schema, views, queries
   report.py                   HTML report
+  publish.py                  pushes the report to the gh-pages branch
   http.py                     cached, throttled, retrying HTTP client
   geo.py                      distance from 02038
   sources/marketcheck.py      source 1
