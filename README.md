@@ -102,8 +102,24 @@ Every run writes `reports/latest.html` plus a timestamped copy
 scores (hover the score, or read the mini-bars: price · mileage · days on
 market · price drop · distance), price, delta vs the comparison basis and
 what that basis was (CarGurus IMV, or the median of N peers), mileage (red
-when over 25k), trim, dealer and town, distance from 02038, days listed,
-flags, and a link to the listing.
+when over 25k), the trim with its **LOW / MID / HIGH tier**, dealer and
+town, distance from 02038, days listed, flags, the VIN, and two links.
+
+**Links.** "listing" is the URL the source reported: MarketCheck's `vdp_url`
+(the dealer's own vehicle page), the CarGurus page, Auto.dev's `vdp`, or the
+dealer site. "VIN search" is a web search for the VIN and is always present,
+so a listing with no URL from its source still has a way in. Both open in a
+new tab. If clicks do nothing, you are probably looking at the file inside a
+preview pane that blocks navigation; open `reports/latest.html` directly in
+a browser (or use `--open`).
+
+**Trim tiers.** `config.TRIM_LADDERS` orders the trims of every model in the
+search set from base to top and tags each as `low`, `medium` or `high`. The
+tier is stored in `vehicles.trim_tier` and shown as a badge. A "?" badge
+means the source's trim string matched nothing on that model's ladder; the
+run summary lists those under `trim_tier_unknown:` so you can add the
+missing name. The same ladders enforce "Preferred Plus and up" / "SEL and
+up" for the two new models with a `min_trim`.
 
 **Price drops since the previous run**: any VIN whose price is lower than the
 last time the tool saw it.
@@ -166,6 +182,7 @@ fact table (one row per run × VIN), `runs` is the batch log.
 |---|---|
 | `vin` | primary key |
 | `year`, `make`, `model`, `trim`, `condition` | `condition` is `new`, `used` or `cpo` |
+| `trim_tier` | `low`, `medium`, `high` from `config.TRIM_LADDERS`; NULL if the trim matched nothing |
 | `body_type`, `drivetrain`, `exterior_color`, `interior_color` | when a source provides them |
 | `first_seen_at`, `first_seen_run_id`, `first_seen_price` | first time this tool saw the VIN |
 | `last_seen_at`, `last_seen_run_id` | most recent run that saw it |
@@ -222,8 +239,8 @@ at any time; the next run re-fetches (and spends quota).
 
 ```sql
 -- latest leaderboard
-SELECT rank, total_score, year, make, model, trim, price, price_delta_pct, miles,
-       dealer_name, distance_miles, days_on_market, flags
+SELECT rank, total_score, year, make, model, trim, trim_tier, price, price_delta_pct, miles,
+       dealer_name, distance_miles, days_on_market, flags, listing_url
 FROM v_leaderboard
 WHERE run_id = (SELECT MAX(run_id) FROM runs WHERE finished_at IS NOT NULL)
 ORDER BY rank;
@@ -240,6 +257,13 @@ FROM observations WHERE vin = 'WA1LXBF70PD012345' ORDER BY run_id;
 SELECT v.vin, v.year, v.make, v.model, v.trim, v.first_seen_price
 FROM vehicles v
 WHERE v.last_seen_run_id = (SELECT MAX(run_id) FROM runs) - 1;
+
+-- mid/high-trim used cars under 25k miles, cheapest first
+SELECT year, make, model, trim, trim_tier, price, miles, dealer_name, listing_url
+FROM v_leaderboard
+WHERE run_id = (SELECT MAX(run_id) FROM runs WHERE finished_at IS NOT NULL)
+  AND condition IN ('used', 'cpo') AND trim_tier IN ('medium', 'high') AND miles < 25000
+ORDER BY price;
 
 -- API quota used per run
 SELECT run_id, started_at, json_extract(notes, '$.api_calls') FROM runs;
@@ -329,5 +353,9 @@ reports/latest.html           created on first run
 * **Distance** uses dealer coordinates when a source provides them
   (MarketCheck does), otherwise the dealer ZIP via `pgeocode` (downloads a
   GeoNames file once), otherwise it is unknown and scored neutrally.
-* **Trim ladders** exist only for the two "and up" rules (CX-90, Atlas).
-  Everything else is accepted at any trim.
+* **Trim ladders** cover all ten models for tier labelling, but only the
+  CX-90 and Atlas targets set a `min_trim`, so every other model is accepted
+  at any trim. Ladders are best-effort lists of factory trim names; when a
+  source formats a trim differently ("SH-AWD w/Technology Package"), the
+  whole-word matcher usually still finds the right entry. Check the
+  `trim_tier_unknown:` counts in the run summary after your first real run.

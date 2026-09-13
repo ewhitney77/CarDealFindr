@@ -19,7 +19,7 @@ from typing import Optional
 
 import config
 from .db import Database, utcnow
-from .filters import apply_filters
+from .filters import apply_filters, trim_tier
 from .http import CachedHttp
 from .models import Listing
 from .scoring import ScoreResult, score_all
@@ -177,6 +177,8 @@ def run_pipeline(db: Database, sources: list[str], keys: dict[str, str], use_cac
     kept, rejections = apply_filters(merged)
     log.info("%d unique VINs -> %d eligible; rejections: %s", len(merged), len(kept), dict(rejections))
     kept_vins = {l.vin for l in kept}
+    for l in kept:
+        l.trim_tier = trim_tier(l.make, l.model, l.trim)
 
     # 4. persist vehicles + every source observation for the eligible VINs
     for l in kept:

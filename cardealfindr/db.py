@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS vehicles (
     make                TEXT,
     model               TEXT,
     trim                TEXT,
+    trim_tier           TEXT,       -- low | medium | high from config.TRIM_LADDERS, NULL if unrecognised
     condition           TEXT,       -- new | used | cpo
     body_type           TEXT,
     drivetrain          TEXT,
@@ -148,9 +149,14 @@ CREATE TABLE IF NOT EXISTS http_cache (
     body        TEXT
 );
 
+-- Views are dropped and recreated on every start so schema additions show up.
+DROP VIEW IF EXISTS v_leaderboard;
+DROP VIEW IF EXISTS v_price_changes;
+DROP VIEW IF EXISTS v_price_history;
+
 -- Price per VIN per run. If several sources saw the VIN in the same run,
 -- take the lowest price (the one you'd actually pay attention to).
-CREATE VIEW IF NOT EXISTS v_price_history AS
+CREATE VIEW v_price_history AS
 SELECT o.vin,
        o.run_id,
        r.started_at        AS run_started_at,
@@ -163,7 +169,7 @@ GROUP BY o.vin, o.run_id;
 
 -- Same, with the previous run's price alongside so drops are one WHERE away:
 --   SELECT * FROM v_price_changes WHERE change_amount < 0 ORDER BY change_amount;
-CREATE VIEW IF NOT EXISTS v_price_changes AS
+CREATE VIEW v_price_changes AS
 SELECT vin, run_id, run_started_at, price, miles,
        LAG(price)  OVER (PARTITION BY vin ORDER BY run_id) AS prev_price,
        LAG(run_id) OVER (PARTITION BY vin ORDER BY run_id) AS prev_run_id,
@@ -171,10 +177,10 @@ SELECT vin, run_id, run_started_at, price, miles,
 FROM v_price_history;
 
 -- Everything the HTML report shows, for every run. Filter on run_id.
-CREATE VIEW IF NOT EXISTS v_leaderboard AS
+CREATE VIEW v_leaderboard AS
 SELECT s.run_id, s.rank, s.total_score,
        s.price_score, s.mileage_score, s.dom_score, s.price_drop_score, s.distance_score,
-       s.vin, v.year, v.make, v.model, v.trim, v.condition,
+       s.vin, v.year, v.make, v.model, v.trim, v.trim_tier, v.condition,
        s.price, s.comparison_basis, s.comparison_value, s.price_delta_pct, s.peer_count,
        s.miles, s.expected_miles, s.days_on_market, s.distance_miles,
        s.price_drop_amount, s.price_drop_pct, s.flags, s.chosen_source,
@@ -196,8 +202,17 @@ class Database:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA foreign_keys=ON")
+        self._migrate()
         self.conn.executescript(SCHEMA)
         self.conn.commit()
+
+    def _migrate(self) -> None:
+        """Add columns introduced after a database was first created."""
+        tables = {r["name"] for r in self.conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        if "vehicles" in tables:
+            cols = {r["name"] for r in self.conn.execute("PRAGMA table_info(vehicles)")}
+            if "trim_tier" not in cols:
+                self.conn.execute("ALTER TABLE vehicles ADD COLUMN trim_tier TEXT")
 
     def close(self) -> None:
         self.conn.close()
@@ -234,15 +249,16 @@ class Database:
         """Insert on first sight; afterwards refresh descriptive fields + last_seen."""
         self.conn.execute(
             """
-            INSERT INTO vehicles (vin, year, make, model, trim, condition, body_type, drivetrain,
+            INSERT INTO vehicles (vin, year, make, model, trim, trim_tier, condition, body_type, drivetrain,
                                   exterior_color, interior_color, first_seen_at, first_seen_run_id,
                                   first_seen_price, last_seen_at, last_seen_run_id)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(vin) DO UPDATE SET
                 year           = COALESCE(excluded.year, vehicles.year),
                 make           = COALESCE(excluded.make, vehicles.make),
                 model          = COALESCE(excluded.model, vehicles.model),
                 trim           = COALESCE(excluded.trim, vehicles.trim),
+                trim_tier      = COALESCE(excluded.trim_tier, vehicles.trim_tier),
                 condition      = COALESCE(excluded.condition, vehicles.condition),
                 body_type      = COALESCE(excluded.body_type, vehicles.body_type),
                 drivetrain     = COALESCE(excluded.drivetrain, vehicles.drivetrain),
@@ -251,7 +267,7 @@ class Database:
                 last_seen_at   = excluded.last_seen_at,
                 last_seen_run_id = excluded.last_seen_run_id
             """,
-            (lst.vin, lst.year, lst.make, lst.model, lst.trim, lst.condition, lst.body_type,
+            (lst.vin, lst.year, lst.make, lst.model, lst.trim, lst.trim_tier, lst.condition, lst.body_type,
              lst.drivetrain, lst.exterior_color, lst.interior_color, observed_at, run_id,
              lst.price, observed_at, run_id))
 
@@ -361,7 +377,7 @@ class Database:
             SELECT c.vin, c.price, c.prev_price, c.change_amount, c.prev_run_id,
                    ROUND(100.0 * c.change_amount / c.prev_price, 1) AS change_pct,
                    pr.started_at AS prev_run_started_at,
-                   v.year, v.make, v.model, v.trim, v.condition,
+                   v.year, v.make, v.model, v.trim, v.trim_tier, v.condition,
                    lb.rank, lb.total_score, lb.dealer_name, lb.dealer_city, lb.dealer_state,
                    lb.listing_url, lb.miles, lb.distance_miles
             FROM v_price_changes c

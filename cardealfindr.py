@@ -84,8 +84,8 @@ def cmd_run(args) -> None:
     rows = db.leaderboard(run_id, min(args.top, 10))
     print(f"\nrun {run_id} complete. Top {len(rows)}:")
     _print_table([{
-        "rank": r["rank"], "score": r["total_score"], "vehicle": f'{r["year"]} {r["make"]} {r["model"]} {r["trim"] or ""}'.strip(),
-        "price": r["price"], "delta%": r["price_delta_pct"], "miles": r["miles"],
+        "rank": r["rank"], "score": r["total_score"], "vehicle": f'{r["year"]} {r["make"]} {r["model"]}',
+        "trim": r["trim"] or "", "tier": r["trim_tier"] or "?", "price": r["price"], "delta%": r["price_delta_pct"], "miles": r["miles"],
         "dealer": r["dealer_name"], "mi": r["distance_miles"], "dom": r["days_on_market"], "flags": r["flags"],
     } for r in rows])
     print(f"\nreport: {os.path.abspath(path)}")
@@ -140,7 +140,7 @@ def cmd_targets(_args) -> None:
         if t.get("min_trim"):
             ladder = config.TRIM_LADDERS.get((t["make"], t["model"]), [])
             rank = trim_rank(t["make"], t["model"], t["min_trim"])
-            ok = ", ".join(ladder[rank:]) if rank is not None else "!! min_trim not on ladder"
+            ok = ", ".join(f"{n} ({tier})" for n, tier in ladder[rank:]) if rank is not None else "!! min_trim not on ladder"
             extra = f"  trims allowed: {ok}"
         years = "any model year" if t["condition"] == "new" else f"{config.USED_YEAR_MIN}-{config.USED_YEAR_MAX}"
         print(f"{t['condition']:<4} {t['make']:<11} {t['model']:<8} {years}{extra}")

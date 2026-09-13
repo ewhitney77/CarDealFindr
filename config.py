@@ -76,21 +76,61 @@ SEARCH_TARGETS = [
     {"make": "Acura",    "model": "MDX",     "condition": "used"},
 ]
 
-# Trim ladders: lowest -> highest. Used to enforce "min_trim and up".
-# Matching is case-insensitive substring; the LONGEST matching ladder entry
-# wins (so "Preferred Plus" beats "Preferred"). A listing whose trim matches
-# nothing on the ladder is EXCLUDED when a min_trim is set, and counted in
-# the run summary so you can see if the ladder needs a new entry.
+# Trim ladders: lowest -> highest, each entry tagged low / medium / high.
+# Two jobs:
+#   1. enforce "min_trim and up" for targets that set one (CX-90, Atlas)
+#   2. label every listing's trim tier in the report and in vehicles.trim_tier
+# Matching is case-insensitive on whole words inside the listing's trim
+# string ("Premium Plus 55 TFSI quattro" -> Premium Plus). When several
+# ladder entries match, the HIGHEST one wins ("SEL Premium R-Line" contains
+# "SEL" too). A trim that matches nothing gets tier NULL and is EXCLUDED only
+# when the target sets a min_trim; otherwise it is kept and shown as "?".
+# The run summary counts unrecognised trims so you can extend a ladder.
 TRIM_LADDERS = {
     ("Mazda", "CX-90"): [
-        "Select", "Preferred", "Preferred Plus", "Premium", "Premium Plus",
-        "Premium Sport", "Turbo S", "Turbo S Premium", "Turbo S Premium Plus",
+        ("Select", "low"), ("Preferred", "low"), ("Preferred Plus", "medium"),
+        ("Premium", "medium"), ("Premium Plus", "high"), ("Premium Sport", "high"),
+        ("Turbo S", "high"), ("Turbo S Premium", "high"), ("Turbo S Premium Plus", "high"),
     ],
     ("Volkswagen", "Atlas"): [
-        "SE", "SE w/Technology", "SE Technology", "SEL", "SEL R-Line",
-        "SEL Premium", "SEL Premium R-Line", "Peak Edition",
+        ("SE", "low"), ("SE w/Technology", "low"), ("SE Technology", "low"),
+        ("SEL", "medium"), ("SEL R-Line", "medium"),
+        ("SEL Premium", "high"), ("SEL Premium R-Line", "high"), ("Peak Edition", "high"),
+    ],
+    ("Acura", "MDX"): [
+        ("Base", "low"), ("SH-AWD", "low"),
+        ("Technology", "medium"), ("A-Spec", "medium"),
+        ("Advance", "high"), ("Type S", "high"), ("Type S Advance", "high"),
+    ],
+    ("Infiniti", "QX60"): [
+        ("Pure", "low"), ("Luxe", "medium"), ("Sport", "medium"),
+        ("Sensory", "high"), ("Autograph", "high"),
+    ],
+    ("Audi", "Q7"): [("Premium", "low"), ("Premium Plus", "medium"), ("Prestige", "high")],
+    ("Audi", "Q8"): [("Premium", "low"), ("Premium Plus", "medium"), ("Prestige", "high")],
+    ("BMW", "X5"): [
+        ("sDrive40i", "low"), ("xDrive40i", "low"),
+        ("xDrive45e", "medium"), ("xDrive50e", "medium"),
+        ("M50i", "high"), ("M60i", "high"), ("X5 M", "high"), ("Competition", "high"),
+    ],
+    ("Volvo", "XC90"): [
+        ("Momentum", "low"), ("Core", "low"),
+        ("Plus", "medium"), ("R-Design", "medium"),
+        ("Inscription", "high"), ("Ultimate", "high"), ("Ultra", "high"),
+    ],
+    ("Genesis", "GV80"): [
+        ("2.5T", "low"), ("2.5T Standard", "low"),
+        ("2.5T Advanced", "medium"), ("3.5T", "medium"),
+        ("2.5T Prestige", "high"), ("3.5T Advanced", "high"), ("3.5T Advanced+", "high"),
+        ("3.5T Prestige", "high"),
+    ],
+    ("Lincoln", "Aviator"): [
+        ("Standard", "low"), ("Premiere", "low"),
+        ("Reserve", "medium"), ("Grand Touring", "medium"),
+        ("Black Label", "high"), ("Black Label Grand Touring", "high"),
     ],
 }
+TRIM_TIER_ORDER = ["low", "medium", "high"]
 
 # ---------------------------------------------------------------------------
 # 4. HARD EXCLUSIONS

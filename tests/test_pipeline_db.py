@@ -64,3 +64,12 @@ def test_two_runs_persist_history_and_detect_drop(db, tmp_path, monkeypatch):
     assert "Verify this" in html and "Price drops since the previous run" in html
     assert "$44,995" in html and "$42,995" in html            # was / now in the drops table
     assert "2023 Audi Q7" in html
+    # trim tiers stored and rendered; every row has a VIN-search link even without a listing URL
+    tiers = {r["vin"]: r["trim_tier"] for r in db.leaderboard(run2, 100)}
+    assert tiers["WA1LXBF7000000007"] == "medium" and tiers["JM3KKDHA000000001"] == "medium"
+    assert tiers["5UXCR6C0000000003"] == "low" and tiers["YV4062PE000000004"] == "high"
+    assert html.count("VIN search") >= 25 and ">listing<" in html
+    db.conn.execute("UPDATE observations SET listing_url=NULL")
+    db.conn.commit()
+    html2 = open(build_report(db, run2, top_n=25)).read()
+    assert "no listing URL" in html2 and html2.count("VIN search") >= 25

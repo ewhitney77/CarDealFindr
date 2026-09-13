@@ -57,6 +57,10 @@ td.num { text-align:right; font-variant-numeric:tabular-nums; }
 .b-miles { background:#ffebe9; color:#a40e26; }
 .b-60\\+ { background:#ddf4ff; color:#0550ae; } .b-price { background:#dafbe1; color:#116329; }
 .b-no, .b-dist { background:#f6f8fa; color:#57606a; border-color:#d0d7de; }
+.t-low { background:#eaeef2; color:#424a53; } .t-medium { background:#ddf4ff; color:#0550ae; }
+.t-high { background:#fbefff; color:#8250df; } .t-unknown { background:#f6f8fa; color:#8c959f; border-color:#d0d7de; }
+.vin { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--muted); user-select:all; }
+.links a { display:block; }
 .lbl-great { color:var(--good); font-weight:700; } .lbl-good { color:var(--good); }
 .lbl-verify { color:var(--warn); font-weight:700; } .lbl-above { color:var(--bad); }
 .delta-neg { color:var(--good); } .delta-pos { color:var(--bad); }
@@ -109,6 +113,39 @@ def _badges(flags: str) -> str:
     return "".join(out)
 
 
+def _tier_badge(tier) -> str:
+    t = tier or "unknown"
+    text = {"low": "LOW", "medium": "MID", "high": "HIGH"}.get(t, "?")
+    tip = {"low": "base / entry trim", "medium": "mid trim", "high": "top trim"}.get(
+        t, "trim not on the ladder in config.TRIM_LADDERS")
+    return f'<span class="badge t-{t}" title="{tip}">{text}</span>'
+
+
+def _tier_sort(tier) -> int:
+    return config.TRIM_TIER_ORDER.index(tier) if tier in config.TRIM_TIER_ORDER else -1
+
+
+def _vin_search_url(vin: str) -> str:
+    return f"https://www.google.com/search?q={_esc(vin)}"
+
+
+def _links(row) -> str:
+    """
+    Always give the reader something clickable:
+      * the listing URL the source reported (dealer VDP / CarGurus page)
+      * a VIN web search as a fallback and as a cross-check
+    """
+    parts = []
+    url = row["listing_url"]
+    if url:
+        parts.append(f'<a href="{_esc(url)}" target="_blank" rel="noopener" title="{_esc(url)}">listing</a>')
+    else:
+        parts.append('<span class="muted" title="source gave no listing URL">no listing URL</span>')
+    parts.append(f'<a href="{_vin_search_url(row["vin"])}" target="_blank" rel="noopener" '
+                 f'title="search the web for this VIN">VIN search</a>')
+    return '<div class="links">' + "".join(parts) + "</div>"
+
+
 def _label(row) -> str:
     flags = row["flags"] or ""
     d = row["price_delta_pct"]
@@ -147,9 +184,9 @@ def _bars(row) -> str:
 
 
 def _top_table(rows) -> str:
-    head = ("<tr><th>#</th><th>Score</th><th>Verdict</th><th>Vehicle</th><th>Price</th>"
+    head = ("<tr><th>#</th><th>Score</th><th>Verdict</th><th>Vehicle</th><th>Trim</th><th>Price</th>"
             "<th>Δ vs basis</th><th>Miles</th><th>Dealer</th><th>Dist (mi)</th><th>Days listed</th>"
-            "<th>Flags</th><th>Link</th></tr>")
+            "<th>Flags</th><th>Links</th></tr>")
     body = []
     for r in rows:
         cond = r["condition"] or "used"
@@ -160,7 +197,6 @@ def _top_table(rows) -> str:
         miles_cls = "hi" if miles >= config.MILEAGE_PREFERRED_MAX else ""
         comp = (f"price {r['price_score']:.0f} · miles {r['mileage_score']:.0f} · dom {r['dom_score']:.0f} · "
                 f"drop {r['price_drop_score']:.0f} · dist {r['distance_score']:.0f}")
-        link = f'<a href="{_esc(r["listing_url"])}" target="_blank" rel="noopener">open</a>' if r["listing_url"] else "—"
         drop = ""
         if r["price_drop_amount"]:
             drop = f'<br><small class="muted">cut {_money(r["price_drop_amount"])} ({r["price_drop_pct"]:.1f}%)</small>'
@@ -170,7 +206,8 @@ def _top_table(rows) -> str:
             f'<td data-v="{r["total_score"]}"><span class="score" title="{comp}">{r["total_score"]:.1f}</span>{_bars(r)}</td>'
             f"<td>{_label(r)}</td>"
             f'<td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<small>{_esc(r["trim"] or "")}</small> <span class="badge b-{cond}">{cond.upper()}</span></td>'
+            f'<span class="badge b-{cond}">{cond.upper()}</span><br><span class="vin">{_esc(r["vin"])}</span></td>'
+            f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num" data-v="{r["price"]}">{_money(r["price"])}{drop}</td>'
             f'<td data-v="{d if d is not None else 999}"><span class="{delta_cls}">{delta_txt}</span>'
             f'<br><small class="muted">{_basis_text(r)}</small></td>'
@@ -182,7 +219,7 @@ def _top_table(rows) -> str:
             f'<td class="num" data-v="{r["days_on_market"] if r["days_on_market"] is not None else -1}">'
             f'{r["days_on_market"] if r["days_on_market"] is not None else "?"}</td>'
             f"<td>{_badges(r['flags'])}</td>"
-            f"<td>{link}</td>"
+            f"<td>{_links(r)}</td>"
             f"</tr>")
     return f'<div class="tablewrap"><table class="sortable"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
 
@@ -190,21 +227,21 @@ def _top_table(rows) -> str:
 def _drops_table(rows) -> str:
     if not rows:
         return '<p class="muted">No price drops since the previous run (or this is the first run).</p>'
-    head = ("<tr><th>Vehicle</th><th>Was</th><th>Now</th><th>Change</th><th>Previous run</th>"
-            "<th>Dealer</th><th>Rank now</th><th>Link</th></tr>")
+    head = ("<tr><th>Vehicle</th><th>Trim</th><th>Was</th><th>Now</th><th>Change</th><th>Previous run</th>"
+            "<th>Dealer</th><th>Rank now</th><th>Links</th></tr>")
     body = []
     for r in rows:
-        link = f'<a href="{_esc(r["listing_url"])}" target="_blank" rel="noopener">open</a>' if r["listing_url"] else "—"
         prev = (r["prev_run_started_at"] or "")[:10]
         body.append(
             f'<tr><td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<small>{_esc(r["trim"] or "")} · {(r["miles"] or 0):,} mi</small></td>'
+            f'<small>{(r["miles"] or 0):,} mi</small><br><span class="vin">{_esc(r["vin"])}</span></td>'
+            f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num">{_money(r["prev_price"])}</td><td class="num">{_money(r["price"])}</td>'
             f'<td class="num delta-neg" data-v="{r["change_amount"]}">{_money(r["change_amount"])} ({r["change_pct"]:+.1f}%)</td>'
             f'<td>run {r["prev_run_id"]} · {prev}</td>'
             f'<td>{_esc(r["dealer_name"])}<br><small class="muted">{_esc(r["dealer_city"] or "")}'
             f'{", " + _esc(r["dealer_state"]) if r["dealer_state"] else ""}</small></td>'
-            f'<td class="num">{r["rank"] if r["rank"] else "—"}</td><td>{link}</td></tr>')
+            f'<td class="num">{r["rank"] if r["rank"] else "—"}</td><td>{_links(r)}</td></tr>')
     return f'<div class="tablewrap"><table class="sortable"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
 
 
@@ -244,7 +281,10 @@ def build_report(db: Database, run_id: int, top_n: int = config.REPORT_TOP_N,
 <p class="legend">Click a column header to sort. Hover the score for component values; the five small bars are
 price · mileage · days-on-market · price-drop · distance. <b>Verify this</b> = more than {config.PRICE_VERIFY_THRESHOLD_PCT:.0f}% below
 IMV/median: usually accident history, a mis-listed trim, or a bait price — check before getting excited.
-Red mileage = over {config.MILEAGE_PREFERRED_MAX:,} mi (allowed, not preferred).</p>
+Red mileage = over {config.MILEAGE_PREFERRED_MAX:,} mi (allowed, not preferred).
+Trim tier LOW / MID / HIGH comes from the ladders in <code>config.TRIM_LADDERS</code>; "?" means the trim string
+matched nothing on the ladder. <b>Links</b>: "listing" is the URL the source reported; "VIN search" always works.
+If links do not respond inside a preview pane, open the file directly in your browser.</p>
 {_top_table(rows)}
 
 <h2>Price drops since the previous run</h2>

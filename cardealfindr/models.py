@@ -31,6 +31,7 @@ class Listing:
     make: Optional[str] = None
     model: Optional[str] = None
     trim: Optional[str] = None
+    trim_tier: Optional[str] = None      # low | medium | high (from config.TRIM_LADDERS)
     condition: Optional[str] = None      # new | used | cpo
     body_type: Optional[str] = None
     drivetrain: Optional[str] = None

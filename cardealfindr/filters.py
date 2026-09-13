@@ -9,7 +9,8 @@ Rules applied, in order (the first failure wins and is counted):
   2. Make not on the Stellantis exclusion list
   3. Make/model/condition matches one of SEARCH_TARGETS
   4. Model year inside the used window (used/CPO only)
-  5. Trim at or above min_trim (only for targets that set one)
+  5. Trim at or above min_trim (only for targets that set one). Every kept
+     listing also gets a low/medium/high trim tier from TRIM_LADDERS.
   6. Price known and <= BUDGET_CAP
   7. Miles known and <= MILEAGE_HARD_CAP
   8. Dealer state in ALLOWED_STATES (if the state is known)
@@ -18,6 +19,7 @@ Rules applied, in order (the first failure wins and is counted):
 from __future__ import annotations
 
 import logging
+import re
 from collections import Counter
 from typing import Optional
 
@@ -51,22 +53,43 @@ def find_target(listing: Listing) -> Optional[dict]:
     return None
 
 
-def trim_rank(make: str, model: str, trim: Optional[str]) -> Optional[int]:
+def _ladder(make: Optional[str], model: Optional[str]) -> list[tuple[str, str]]:
+    """Case-insensitive lookup of the (trim, tier) ladder for a make/model."""
+    for (m, mo), ladder in config.TRIM_LADDERS.items():
+        if _norm(m) == _norm(make) and _norm(mo) == _norm(model):
+            return ladder
+    return []
+
+
+def _matches(name: str, trim: str) -> bool:
+    """Whole-word, case-insensitive containment ("SE" must not match "SEL")."""
+    pattern = r"(?<![A-Za-z0-9])" + re.escape(name) + r"(?![A-Za-z0-9])"
+    return re.search(pattern, trim, flags=re.IGNORECASE) is not None
+
+
+def trim_rank(make: Optional[str], model: Optional[str], trim: Optional[str]) -> Optional[int]:
     """
     Position of `trim` on the ladder for this make/model (0 = lowest).
-    Longest ladder entry contained in the trim string wins, so
-    "Preferred Plus" beats "Preferred". None if no ladder or no match.
+    The HIGHEST ladder entry found in the trim string wins, so
+    "SEL Premium R-Line" ranks as SEL Premium R-Line, not SEL.
+    None if there is no ladder or nothing matches.
     """
-    ladder = config.TRIM_LADDERS.get((make, model))
+    ladder = _ladder(make, model)
     if not ladder or not trim:
         return None
-    t = trim.lower()
-    best: Optional[tuple[int, int]] = None      # (match_length, index)
-    for idx, name in enumerate(ladder):
-        n = name.lower()
-        if n in t and (best is None or len(n) > best[0]):
-            best = (len(n), idx)
-    return best[1] if best else None
+    best: Optional[int] = None
+    for idx, (name, _tier) in enumerate(ladder):
+        if _matches(name, trim):
+            best = idx
+    return best
+
+
+def trim_tier(make: Optional[str], model: Optional[str], trim: Optional[str]) -> Optional[str]:
+    """'low' / 'medium' / 'high' for the listing's trim, or None if unrecognised."""
+    rank = trim_rank(make, model, trim)
+    if rank is None:
+        return None
+    return _ladder(make, model)[rank][1]
 
 
 def apply_filters(listings: list[Listing]) -> tuple[list[Listing], Counter]:
@@ -103,6 +126,9 @@ def apply_filters(listings: list[Listing]) -> tuple[list[Listing], Counter]:
             if want is not None and have < want:
                 why["below_min_trim"] += 1
                 continue
+        elif lst.trim and trim_tier(lst.make, lst.model, lst.trim) is None:
+            # No min_trim rule, so keep it, but count it so the ladder can be extended.
+            why[f"trim_tier_unknown:{lst.make} {lst.model}:{lst.trim}"] += 1
         if lst.price is None:
             why["no_price"] += 1
             continue

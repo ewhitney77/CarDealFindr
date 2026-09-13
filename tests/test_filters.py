@@ -1,5 +1,5 @@
 import config
-from cardealfindr.filters import apply_filters, find_target, trim_rank
+from cardealfindr.filters import apply_filters, find_target, trim_rank, trim_tier
 from cardealfindr.models import Listing
 
 
@@ -17,7 +17,27 @@ def test_trim_rank_longest_match_wins():
     assert trim_rank("Mazda", "CX-90", "Premium Plus") == 4
     assert trim_rank("Volkswagen", "Atlas", "2.0T SEL Premium R-Line") == 6
     assert trim_rank("Volkswagen", "Atlas", "2.0T SE") == 0
-    assert trim_rank("Audi", "Q7", "Premium") is None        # no ladder for Q7
+    assert trim_rank("Audi", "Q7", "Premium Plus 55 TFSI quattro") == 1
+    assert trim_rank("Audi", "Q7", "Signature Edition") is None   # not on the ladder
+    assert trim_rank("Kia", "Telluride", "SX") is None            # no ladder at all
+
+
+def test_trim_tier_whole_word_and_highest_match():
+    assert trim_tier("Volkswagen", "Atlas", "2.0T SE") == "low"
+    assert trim_tier("Volkswagen", "Atlas", "2.0T SEL") == "medium"           # "SE" must not match inside "SEL"
+    assert trim_tier("Volkswagen", "Atlas", "SEL Premium R-Line") == "high"   # highest entry wins over "SEL"
+    assert trim_tier("Acura", "MDX", "A-Spec w/Technology Package") == "medium"
+    assert trim_tier("Acura", "MDX", "Type S Advance") == "high"
+    assert trim_tier("BMW", "X5", "xDrive40i") == "low" and trim_tier("BMW", "X5", "M60i") == "high"
+    assert trim_tier("Volvo", "XC90", "B6 Plus Bright") == "medium"
+    assert trim_tier("Volvo", "XC90", "T6 Inscription") == "high"
+    assert trim_tier("Genesis", "GV80", "2.5T") == "low"
+    assert trim_tier("Genesis", "GV80", "3.5T Advanced+") == "high"
+    assert trim_tier("Lincoln", "Aviator", "Black Label Grand Touring") == "high"
+    assert trim_tier("Lincoln", "Aviator", "Reserve") == "medium"
+    assert trim_tier("Infiniti", "QX60", "Luxe") == "medium"
+    assert trim_tier("audi", "q7", "Prestige") == "high"                     # case-insensitive make/model
+    assert trim_tier("Audi", "Q7", "Mystery Edition") is None
 
 
 def test_find_target_condition_aware():
