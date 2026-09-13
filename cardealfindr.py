@@ -110,7 +110,7 @@ def _do_publish(path: str, run_id: int, args) -> None:
     print(f"published: {where} branch {res['branch']} ({res['commit']})")
     if res["url"]:
         print(f"open it at: {res['url']}")
-        print(f"(first time only: turn Pages on at {res['settings']} -> "
+        print(f"  (allow up to a minute; if it 404s, enable Pages at {res['settings']} -> "
               f"Source: Deploy from a branch -> {res['branch']} / root)")
 
 

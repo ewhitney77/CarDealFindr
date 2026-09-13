@@ -108,12 +108,14 @@ page, so you have one permanent URL instead of hunting for a file:
 
 **<https://ewhitney77.github.io/CarDealFindr/>**
 
-**One-time setup.** Open
+GitHub turned Pages on automatically when the `gh-pages` branch was first
+pushed, so there is normally nothing to set up. If the URL returns 404, open
 <https://github.com/ewhitney77/CarDealFindr/settings/pages>, set **Source** to
 *Deploy from a branch*, pick branch **gh-pages** and folder **/ (root)**, and
-save. The page goes live about a minute later. You only do this once.
+save. A publish takes up to a minute to appear; a hard refresh
+(Cmd-Shift-R) clears a stale cached copy.
 
-After that:
+To update the page:
 
 ```bash
 python cardealfindr.py run --publish     # search, score, and update the web page
