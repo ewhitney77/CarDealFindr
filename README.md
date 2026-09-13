@@ -90,6 +90,9 @@ python cardealfindr.py run --fixture tests/fixtures/sample_listings.json --open
 
 That loads synthetic listings, scores them, writes the database and the
 report, so you can see the whole pipeline before spending a single API call.
+The cars and dealers in it are invented, so its links do not open a real
+listing; the report shows a yellow "Demo data" banner to make that obvious.
+Links are only real on a live run.
 
 Every run writes `reports/latest.html` plus a timestamped copy
 `reports/run_0007_20260913_1030.html`.
@@ -105,13 +108,26 @@ what that basis was (CarGurus IMV, or the median of N peers), mileage (red
 when over 25k), the trim with its **LOW / MID / HIGH tier**, dealer and
 town, distance from 02038, days listed, flags, the VIN, and two links.
 
-**Links.** "listing" is the URL the source reported: MarketCheck's `vdp_url`
-(the dealer's own vehicle page), the CarGurus page, Auto.dev's `vdp`, or the
-dealer site. "VIN search" is a web search for the VIN and is always present,
-so a listing with no URL from its source still has a way in. Both open in a
-new tab. If clicks do nothing, you are probably looking at the file inside a
-preview pane that blocks navigation; open `reports/latest.html` directly in
-a browser (or use `--open`).
+**Links.** Every link goes straight to that exact car. Nothing points at a
+search page.
+
+| Label | Where it goes | Comes from |
+|---|---|---|
+| Dealer page | the dealership's own vehicle detail page for that VIN | MarketCheck `vdp_url` |
+| CarGurus | the CarGurus listing for that VIN | Apify actor |
+| Auto.dev | Auto.dev's page for that VIN | Auto.dev `vdp` |
+| *Herb Chambers* etc. | the page the scraper found the car on | dealer-site scrapers |
+
+A car found by more than one source shows more than one link, so you can open
+the dealer's own listing and the CarGurus page for the same VIN side by side.
+When a source returns no vehicle page but does give a dealership website, the
+row shows a greyed "… site" link to the dealership instead. When no source
+gives any URL, the row says "no direct link" rather than sending you to a
+search engine.
+
+If clicks do nothing, you are probably viewing the file inside a preview pane
+that blocks navigation; open `reports/latest.html` directly in a browser (or
+use `--open`).
 
 **Trim tiers.** `config.TRIM_LADDERS` orders the trims of every model in the
 search set from base to top and tags each as `low`, `medium` or `high`. The
@@ -198,7 +214,9 @@ fact table (one row per run × VIN), `runs` is the batch log.
 | `source_prior_price`, `source_price_change_pct` | the source's own price-change fields (MarketCheck `ref_price` / `price_change_percent`) |
 | `imv`, `deal_rating` | CarGurus rows only |
 | `dealer_name`, `dealer_city`, `dealer_state`, `dealer_zip`, `dealer_lat`, `dealer_lon`, `distance_miles` | where the car is |
-| `listing_url`, `source_listing_id`, `source_first_seen_at` | link and provenance |
+| `dealer_website` | the dealership's home page, used as a link only when that source gave no vehicle page |
+| `listing_url` | direct link to this exact car on that source's site |
+| `source_listing_id`, `source_first_seen_at` | provenance |
 | `raw_json` | the untouched source payload, for forensics |
 
 Only VINs that passed the filters are written; rejected listings are

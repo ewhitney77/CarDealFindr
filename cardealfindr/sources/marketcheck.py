@@ -148,7 +148,11 @@ class MarketCheckSource:
             first_seen_at=first_seen_iso,
             dealer_name=dealer.get("name"), dealer_city=dealer.get("city"),
             dealer_state=(dealer.get("state") or "").upper() or None, dealer_zip=dealer.get("zip"),
-            dealer_lat=lat, dealer_lon=lon, distance_miles=dist,
+            dealer_lat=lat, dealer_lon=lon,
+            dealer_website=first_present(dealer, "website", "dealer_website", "url"),
+            distance_miles=dist,
+            # vdp_url is the DEALER'S OWN vehicle detail page for this exact car.
+            # This is the link we want in the report; it goes straight to the listing.
             listing_url=raw.get("vdp_url"), source_listing_id=raw.get("id"),
             raw=raw,
         )

@@ -9,7 +9,7 @@
    "inventory_type": "used",
    "is_certified": true,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+Audi+Norwood+Norwood+MA",
+   "vdp_url": "https://www.audinorwood.com/inventory/used-2023-audi-q7-premium-plus-WA1LXBF7000000001.htm",
    "first_seen_at": 1786360341,
    "first_seen_at_date": "2026-08-10",
    "last_seen_at": 1789297941,
@@ -35,7 +35,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.audinorwood.com"
    }
   },
   {
@@ -47,7 +48,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+Genesis+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.genesisofwarwick.com/inventory/used-2023-audi-q7-premium-plus-WA1LXBF7000000002.htm",
    "first_seen_at": 1783163541,
    "first_seen_at_date": "2026-07-04",
    "last_seen_at": 1789297941,
@@ -73,7 +74,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.genesisofwarwick.com"
    },
    "ref_price": 48900,
    "price_change_percent": -4.91
@@ -87,7 +89,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Audi+Q7+Premium+Plus+Lincoln+of+Hartford+Hartford+CT",
+   "vdp_url": "https://www.lincolnofhartford.com/inventory/used-2022-audi-q7-premium-plus-WA1LXBF7000000003.htm",
    "first_seen_at": 1788261141,
    "first_seen_at_date": "2026-09-01",
    "last_seen_at": 1789297941,
@@ -113,7 +115,8 @@
     "zip": "06103",
     "latitude": 41.7658,
     "longitude": -72.6734,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.lincolnofhartford.com"
    }
   },
   {
@@ -125,7 +128,7 @@
    "inventory_type": "used",
    "is_certified": true,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Herb+Chambers+BMW+of+Boston+Boston+MA",
+   "vdp_url": "https://www.herbchambersbmwofboston.com/inventory/used-2023-audi-q7-premium-WA1LXBF7000000004.htm",
    "first_seen_at": 1787397141,
    "first_seen_at_date": "2026-08-22",
    "last_seen_at": 1789297941,
@@ -151,7 +154,8 @@
     "zip": "02134",
     "latitude": 42.3611,
     "longitude": -71.131,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.herbchambersbmwofboston.com"
    }
   },
   {
@@ -163,7 +167,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Audi+Q7+Premium+Prime+Audi+Westwood+Westwood+MA",
+   "vdp_url": "https://www.primeaudiwestwood.com/inventory/used-2022-audi-q7-premium-WA1LXBF7000000005.htm",
    "first_seen_at": 1781089941,
    "first_seen_at_date": "2026-06-10",
    "last_seen_at": 1789297941,
@@ -189,7 +193,8 @@
     "zip": "02090",
     "latitude": 42.214,
     "longitude": -71.199,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.primeaudiwestwood.com"
    },
    "ref_price": 42500,
    "price_change_percent": -6.12
@@ -203,7 +208,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Audi+Q7+Premium+Plus+Audi+Norwood+Norwood+MA",
+   "vdp_url": "https://www.audinorwood.com/inventory/used-2021-audi-q7-premium-plus-WA1LXBF7000000006.htm",
    "first_seen_at": 1788606741,
    "first_seen_at_date": "2026-09-05",
    "last_seen_at": 1789297941,
@@ -229,7 +234,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.audinorwood.com"
    }
   },
   {
@@ -241,7 +247,7 @@
    "inventory_type": "used",
    "is_certified": true,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+Prime+Audi+Westwood+Westwood+MA",
+   "vdp_url": "https://www.primeaudiwestwood.com/inventory/used-2023-audi-q7-premium-plus-WA1LXBF7000000007.htm",
    "first_seen_at": 1788865941,
    "first_seen_at_date": "2026-09-08",
    "last_seen_at": 1789297941,
@@ -267,7 +273,8 @@
     "zip": "02090",
     "latitude": 42.214,
     "longitude": -71.199,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.primeaudiwestwood.com"
    }
   },
   {
@@ -279,7 +286,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Audi+Q7+Prestige+Ira+Lexus+of+Manchester+Bedford+NH",
+   "vdp_url": "https://www.iralexusofmanchester.com/inventory/used-2022-audi-q7-prestige-WA1LXBF7000000008.htm",
    "first_seen_at": 1785496341,
    "first_seen_at_date": "2026-07-31",
    "last_seen_at": 1789297941,
@@ -305,7 +312,8 @@
     "zip": "03110",
     "latitude": 42.9464,
     "longitude": -71.5159,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iralexusofmanchester.com"
    }
   },
   {
@@ -317,7 +325,7 @@
    "inventory_type": "used",
    "is_certified": false,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+BMW+of+Albany+Albany+NY",
+   "vdp_url": "https://www.bmwofalbany.com/inventory/used-2023-audi-q7-premium-plus-WA1LXBF7000000009.htm",
    "first_seen_at": 1786705941,
    "first_seen_at_date": "2026-08-14",
    "last_seen_at": 1789297941,
@@ -343,7 +351,8 @@
     "zip": "12205",
     "latitude": 42.7166,
     "longitude": -73.8018,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.bmwofalbany.com"
    }
   },
   {
@@ -355,7 +364,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Audi+Q8+Premium+Audi+Norwood+Norwood+MA",
+   "vdp_url": "https://www.audinorwood.com/inventory/used-2021-audi-q8-premium-WA1AVAF1000000001.htm",
    "first_seen_at": 1784027541,
    "first_seen_at_date": "2026-07-14",
    "last_seen_at": 1789297941,
@@ -381,7 +390,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.audinorwood.com"
    }
   },
   {
@@ -393,7 +403,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Audi+Q8+Premium+Plus+Prime+Audi+Westwood+Westwood+MA",
+   "vdp_url": "https://www.primeaudiwestwood.com/inventory/used-2021-audi-q8-premium-plus-WA1AVAF1000000002.htm",
    "first_seen_at": 1787829141,
    "first_seen_at_date": "2026-08-27",
    "last_seen_at": 1789297941,
@@ -419,7 +429,8 @@
     "zip": "02090",
     "latitude": 42.214,
     "longitude": -71.199,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.primeaudiwestwood.com"
    }
   },
   {
@@ -431,7 +442,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Audi+Q8+Premium+Audi+Norwood+Norwood+MA",
+   "vdp_url": "https://www.audinorwood.com/inventory/used-2022-audi-q8-premium-WA1AVAF1000000003.htm",
    "first_seen_at": 1788520341,
    "first_seen_at_date": "2026-09-04",
    "last_seen_at": 1789297941,
@@ -457,7 +468,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.audinorwood.com"
    }
   },
   {
@@ -469,7 +481,7 @@
    "inventory_type": "used",
    "is_certified": 1,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+BMW+X5+xDrive40i+Herb+Chambers+BMW+of+Boston+Boston+MA",
+   "vdp_url": "https://www.herbchambersbmwofboston.com/inventory/used-2022-bmw-x5-xdrive40i-5UXCR6C0000000001.htm",
    "first_seen_at": 1785150741,
    "first_seen_at_date": "2026-07-27",
    "last_seen_at": 1789297941,
@@ -495,7 +507,8 @@
     "zip": "02134",
     "latitude": 42.3611,
     "longitude": -71.131,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.herbchambersbmwofboston.com"
    },
    "ref_price": 49900,
    "price_change_percent": -4.81
@@ -509,7 +522,7 @@
    "inventory_type": "used",
    "is_certified": 1,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+BMW+X5+xDrive40i+Herb+Chambers+BMW+of+Boston+Boston+MA",
+   "vdp_url": "https://www.herbchambersbmwofboston.com/inventory/used-2021-bmw-x5-xdrive40i-5UXCR6C0000000002.htm",
    "first_seen_at": 1781694741,
    "first_seen_at_date": "2026-06-17",
    "last_seen_at": 1789297941,
@@ -535,7 +548,8 @@
     "zip": "02134",
     "latitude": 42.3611,
     "longitude": -71.131,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.herbchambersbmwofboston.com"
    }
   },
   {
@@ -547,7 +561,7 @@
    "inventory_type": "used",
    "is_certified": 1,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+BMW+X5+xDrive40i+Ira+Lexus+of+Manchester+Bedford+NH",
+   "vdp_url": "https://www.iralexusofmanchester.com/inventory/used-2023-bmw-x5-xdrive40i-5UXCR6C0000000003.htm",
    "first_seen_at": 1788088341,
    "first_seen_at_date": "2026-08-30",
    "last_seen_at": 1789297941,
@@ -573,7 +587,8 @@
     "zip": "03110",
     "latitude": 42.9464,
     "longitude": -71.5159,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iralexusofmanchester.com"
    }
   },
   {
@@ -585,7 +600,7 @@
    "inventory_type": "used",
    "is_certified": 1,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+BMW+X5+sDrive40i+Herb+Chambers+BMW+of+Boston+Boston+MA",
+   "vdp_url": "https://www.herbchambersbmwofboston.com/inventory/used-2022-bmw-x5-sdrive40i-5UXCR6C0000000004.htm",
    "first_seen_at": 1786446741,
    "first_seen_at_date": "2026-08-11",
    "last_seen_at": 1789297941,
@@ -611,7 +626,8 @@
     "zip": "02134",
     "latitude": 42.3611,
     "longitude": -71.131,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.herbchambersbmwofboston.com"
    },
    "ref_price": 45900,
    "price_change_percent": -3.05
@@ -625,7 +641,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Volvo+XC90+B6+Plus+Bright+Volvo+Cars+Norwood+Norwood+MA",
+   "vdp_url": "https://www.volvocarsnorwood.com/inventory/used-2023-volvo-xc90-b6-plus-bright-YV4062PE000000001.htm",
    "first_seen_at": 1787051541,
    "first_seen_at_date": "2026-08-18",
    "last_seen_at": 1789297941,
@@ -651,7 +667,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.volvocarsnorwood.com"
    }
   },
   {
@@ -663,7 +680,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Volvo+XC90+T6+Momentum+Volvo+Cars+Norwood+Norwood+MA",
+   "vdp_url": "https://www.volvocarsnorwood.com/inventory/used-2022-volvo-xc90-t6-momentum-YV4062PE000000002.htm",
    "first_seen_at": 1783768341,
    "first_seen_at_date": "2026-07-11",
    "last_seen_at": 1789297941,
@@ -689,7 +706,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.volvocarsnorwood.com"
    }
   },
   {
@@ -701,7 +719,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2024+Volvo+XC90+B5+Core+Volvo+Cars+Norwood+Norwood+MA",
+   "vdp_url": "https://www.volvocarsnorwood.com/inventory/used-2024-volvo-xc90-b5-core-YV4062PE000000003.htm",
    "first_seen_at": 1787656341,
    "first_seen_at_date": "2026-08-25",
    "last_seen_at": 1789297941,
@@ -727,7 +745,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.volvocarsnorwood.com"
    }
   },
   {
@@ -739,7 +758,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Volvo+XC90+T6+Inscription+Prime+Motor+Group+Saco+Saco+ME",
+   "vdp_url": "https://www.primemotorgroupsaco.com/inventory/used-2021-volvo-xc90-t6-inscription-YV4062PE000000004.htm",
    "first_seen_at": 1780485141,
    "first_seen_at_date": "2026-06-03",
    "last_seen_at": 1789297941,
@@ -765,7 +784,8 @@
     "zip": "04072",
     "latitude": 43.5009,
     "longitude": -70.4428,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.primemotorgroupsaco.com"
    }
   },
   {
@@ -777,7 +797,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Genesis+GV80+2.5T+Advanced+Genesis+of+Warwick+Warwick+RI",
+   "vdp_url": null,
    "first_seen_at": 1785755541,
    "first_seen_at_date": "2026-08-03",
    "last_seen_at": 1789297941,
@@ -815,7 +835,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Genesis+GV80+2.5T+Genesis+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.genesisofwarwick.com/inventory/used-2023-genesis-gv80-2-5t-KMUHBDSB000000002.htm",
    "first_seen_at": 1787569941,
    "first_seen_at_date": "2026-08-24",
    "last_seen_at": 1789297941,
@@ -841,7 +861,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.genesisofwarwick.com"
    }
   },
   {
@@ -853,7 +874,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Genesis+GV80+3.5T+Advanced+Genesis+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.genesisofwarwick.com/inventory/used-2021-genesis-gv80-3-5t-advanced-KMUHBDSB000000003.htm",
    "first_seen_at": 1782645141,
    "first_seen_at_date": "2026-06-28",
    "last_seen_at": 1789297941,
@@ -879,7 +900,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.genesisofwarwick.com"
    }
   },
   {
@@ -891,7 +913,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Lincoln+Aviator+Reserve+Lincoln+of+Hartford+Hartford+CT",
+   "vdp_url": "https://www.lincolnofhartford.com/inventory/used-2022-lincoln-aviator-reserve-5LM5J7XC000000001.htm",
    "first_seen_at": 1784200341,
    "first_seen_at_date": "2026-07-16",
    "last_seen_at": 1789297941,
@@ -917,7 +939,8 @@
     "zip": "06103",
     "latitude": 41.7658,
     "longitude": -72.6734,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.lincolnofhartford.com"
    },
    "ref_price": 46900,
    "price_change_percent": -6.4
@@ -931,7 +954,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Lincoln+Aviator+Reserve+Lincoln+of+Hartford+Hartford+CT",
+   "vdp_url": "https://www.lincolnofhartford.com/inventory/used-2023-lincoln-aviator-reserve-5LM5J7XC000000002.htm",
    "first_seen_at": 1788347541,
    "first_seen_at_date": "2026-09-02",
    "last_seen_at": 1789297941,
@@ -957,7 +980,8 @@
     "zip": "06103",
     "latitude": 41.7658,
     "longitude": -72.6734,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.lincolnofhartford.com"
    }
   },
   {
@@ -969,7 +993,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2021+Lincoln+Aviator+Reserve+Lincoln+of+Hartford+Hartford+CT",
+   "vdp_url": "https://www.lincolnofhartford.com/inventory/used-2021-lincoln-aviator-reserve-5LM5J7XC000000003.htm",
    "first_seen_at": 1778065941,
    "first_seen_at_date": "2026-05-06",
    "last_seen_at": 1789297941,
@@ -995,7 +1019,8 @@
     "zip": "06103",
     "latitude": 41.7658,
     "longitude": -72.6734,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.lincolnofhartford.com"
    },
    "ref_price": 41900,
    "price_change_percent": -7.16
@@ -1009,7 +1034,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Acura+MDX+Technology+Package+Acura+of+Boston+Brighton+MA",
+   "vdp_url": "https://www.acuraofboston.com/inventory/used-2023-acura-mdx-technology-package-5J8YE1H4000000001.htm",
    "first_seen_at": 1786101141,
    "first_seen_at_date": "2026-08-07",
    "last_seen_at": 1789297941,
@@ -1035,7 +1060,8 @@
     "zip": "02135",
     "latitude": 42.3487,
     "longitude": -71.1543,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.acuraofboston.com"
    }
   },
   {
@@ -1047,7 +1073,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2022+Acura+MDX+A-Spec+Acura+of+Boston+Brighton+MA",
+   "vdp_url": "https://www.acuraofboston.com/inventory/used-2022-acura-mdx-a-spec-5J8YE1H4000000002.htm",
    "first_seen_at": 1784805141,
    "first_seen_at_date": "2026-07-23",
    "last_seen_at": 1789297941,
@@ -1073,7 +1099,8 @@
     "zip": "02135",
     "latitude": 42.3487,
     "longitude": -71.1543,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.acuraofboston.com"
    }
   },
   {
@@ -1085,7 +1112,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2024+Acura+MDX+Base+Acura+of+Boston+Brighton+MA",
+   "vdp_url": "https://www.acuraofboston.com/inventory/used-2024-acura-mdx-base-5J8YE1H4000000003.htm",
    "first_seen_at": 1788001941,
    "first_seen_at_date": "2026-08-29",
    "last_seen_at": 1789297941,
@@ -1111,7 +1138,8 @@
     "zip": "02135",
     "latitude": 42.3487,
     "longitude": -71.1543,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.acuraofboston.com"
    }
   },
   {
@@ -1123,7 +1151,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Acura+MDX+Technology+Package+Acura+of+Boston+Brighton+MA",
+   "vdp_url": "https://www.acuraofboston.com/inventory/new-2026-acura-mdx-technology-package-5J8YE1H5000000001.htm",
    "first_seen_at": 1787569941,
    "first_seen_at_date": "2026-08-24",
    "last_seen_at": 1789297941,
@@ -1149,7 +1177,8 @@
     "zip": "02135",
     "latitude": 42.3487,
     "longitude": -71.1543,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.acuraofboston.com"
    },
    "msrp": 55900
   },
@@ -1162,7 +1191,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Acura+MDX+Base+Acura+of+Boston+Brighton+MA",
+   "vdp_url": "https://www.acuraofboston.com/inventory/new-2026-acura-mdx-base-5J8YE1H5000000002.htm",
    "first_seen_at": 1785409941,
    "first_seen_at_date": "2026-07-30",
    "last_seen_at": 1789297941,
@@ -1188,7 +1217,8 @@
     "zip": "02135",
     "latitude": 42.3487,
     "longitude": -71.1543,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.acuraofboston.com"
    },
    "msrp": 52400
   },
@@ -1201,7 +1231,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Mazda+CX-90+Preferred+Plus+Mazda+of+Milford+Milford+MA",
+   "vdp_url": "https://www.mazdaofmilford.com/inventory/new-2026-mazda-cx-90-preferred-plus-JM3KKDHA000000001.htm",
    "first_seen_at": 1786446741,
    "first_seen_at_date": "2026-08-11",
    "last_seen_at": 1789297941,
@@ -1227,7 +1257,8 @@
     "zip": "01757",
     "latitude": 42.1398,
     "longitude": -71.5164,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.mazdaofmilford.com"
    },
    "msrp": 45000
   },
@@ -1240,7 +1271,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Mazda+CX-90+Premium+Mazda+of+Milford+Milford+MA",
+   "vdp_url": "https://www.mazdaofmilford.com/inventory/new-2026-mazda-cx-90-premium-JM3KKDHA000000002.htm",
    "first_seen_at": 1788261141,
    "first_seen_at_date": "2026-09-01",
    "last_seen_at": 1789297941,
@@ -1266,7 +1297,8 @@
     "zip": "01757",
     "latitude": 42.1398,
     "longitude": -71.5164,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.mazdaofmilford.com"
    },
    "msrp": 48200
   },
@@ -1279,7 +1311,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Mazda+CX-90+Preferred+Mazda+of+Milford+Milford+MA",
+   "vdp_url": "https://www.mazdaofmilford.com/inventory/new-2026-mazda-cx-90-preferred-JM3KKDHA000000003.htm",
    "first_seen_at": 1787569941,
    "first_seen_at_date": "2026-08-24",
    "last_seen_at": 1789297941,
@@ -1305,7 +1337,8 @@
     "zip": "01757",
     "latitude": 42.1398,
     "longitude": -71.5164,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.mazdaofmilford.com"
    },
    "msrp": 42000
   },
@@ -1318,7 +1351,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Mazda+CX-90+Premium+Plus+Mazda+of+Milford+Milford+MA",
+   "vdp_url": "https://www.mazdaofmilford.com/inventory/new-2026-mazda-cx-90-premium-plus-JM3KKDHA000000004.htm",
    "first_seen_at": 1783595541,
    "first_seen_at_date": "2026-07-09",
    "last_seen_at": 1789297941,
@@ -1344,7 +1377,8 @@
     "zip": "01757",
     "latitude": 42.1398,
     "longitude": -71.5164,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.mazdaofmilford.com"
    },
    "msrp": 51500
   },
@@ -1357,7 +1391,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2025+Mazda+CX-90+Turbo+S+Premium+Mazda+of+Milford+Milford+MA",
+   "vdp_url": "https://www.mazdaofmilford.com/inventory/new-2025-mazda-cx-90-turbo-s-premium-JM3KKDHA000000005.htm",
    "first_seen_at": 1777201941,
    "first_seen_at_date": "2026-04-26",
    "last_seen_at": 1789297941,
@@ -1383,7 +1417,8 @@
     "zip": "01757",
     "latitude": 42.1398,
     "longitude": -71.5164,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.mazdaofmilford.com"
    },
    "msrp": 56000
   },
@@ -1396,7 +1431,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Volkswagen+Atlas+SEL+Ira+Volkswagen+Danvers+MA",
+   "vdp_url": "https://www.iravolkswagen.com/inventory/new-2026-volkswagen-atlas-sel-1V2BR2CA000000001.htm",
    "first_seen_at": 1786878741,
    "first_seen_at_date": "2026-08-16",
    "last_seen_at": 1789297941,
@@ -1422,7 +1457,8 @@
     "zip": "01923",
     "latitude": 42.5751,
     "longitude": -70.93,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iravolkswagen.com"
    },
    "msrp": 47500
   },
@@ -1435,7 +1471,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Volkswagen+Atlas+SEL+Premium+R-Line+Ira+Volkswagen+Danvers+MA",
+   "vdp_url": "https://www.iravolkswagen.com/inventory/new-2026-volkswagen-atlas-sel-premium-r-line-1V2BR2CA000000002.htm",
    "first_seen_at": 1784027541,
    "first_seen_at_date": "2026-07-14",
    "last_seen_at": 1789297941,
@@ -1461,7 +1497,8 @@
     "zip": "01923",
     "latitude": 42.5751,
     "longitude": -70.93,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iravolkswagen.com"
    },
    "msrp": 53000
   },
@@ -1474,7 +1511,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Volkswagen+Atlas+SE+w%2FTechnology+Ira+Volkswagen+Danvers+MA",
+   "vdp_url": "https://www.iravolkswagen.com/inventory/new-2026-volkswagen-atlas-se-w-technology-1V2BR2CA000000003.htm",
    "first_seen_at": 1788520341,
    "first_seen_at_date": "2026-09-04",
    "last_seen_at": 1789297941,
@@ -1500,7 +1537,8 @@
     "zip": "01923",
     "latitude": 42.5751,
     "longitude": -70.93,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iravolkswagen.com"
    },
    "msrp": 43000
   },
@@ -1513,7 +1551,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2025+Volkswagen+Atlas+SEL+R-Line+Ira+Volkswagen+Danvers+MA",
+   "vdp_url": "https://www.iravolkswagen.com/inventory/new-2025-volkswagen-atlas-sel-r-line-1V2BR2CA000000004.htm",
    "first_seen_at": 1779102741,
    "first_seen_at_date": "2026-05-18",
    "last_seen_at": 1789297941,
@@ -1539,7 +1577,8 @@
     "zip": "01923",
     "latitude": 42.5751,
     "longitude": -70.93,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.iravolkswagen.com"
    },
    "msrp": 49000
   },
@@ -1552,7 +1591,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Infiniti+QX60+Luxe+Infiniti+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.infinitiofwarwick.com/inventory/new-2026-infiniti-qx60-luxe-5N1DL1GS000000001.htm",
    "first_seen_at": 1785841941,
    "first_seen_at_date": "2026-08-04",
    "last_seen_at": 1789297941,
@@ -1578,7 +1617,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.infinitiofwarwick.com"
    },
    "msrp": 52000
   },
@@ -1591,7 +1631,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2026+Infiniti+QX60+Pure+Infiniti+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.infinitiofwarwick.com/inventory/new-2026-infiniti-qx60-pure-5N1DL1GS000000002.htm",
    "first_seen_at": 1787397141,
    "first_seen_at_date": "2026-08-22",
    "last_seen_at": 1789297941,
@@ -1617,7 +1657,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.infinitiofwarwick.com"
    },
    "msrp": 48500
   },
@@ -1630,7 +1671,7 @@
    "inventory_type": "new",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2025+Infiniti+QX60+Luxe+Infiniti+of+Warwick+Warwick+RI",
+   "vdp_url": "https://www.infinitiofwarwick.com/inventory/new-2025-infiniti-qx60-luxe-5N1DL1GS000000003.htm",
    "first_seen_at": 1776337941,
    "first_seen_at_date": "2026-04-16",
    "last_seen_at": 1789297941,
@@ -1656,7 +1697,8 @@
     "zip": "02886",
     "latitude": 41.7001,
     "longitude": -71.4162,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.infinitiofwarwick.com"
    },
    "msrp": 52000
   },
@@ -1669,7 +1711,7 @@
    "inventory_type": "used",
    "is_certified": 0,
    "seller_type": "dealer",
-   "vdp_url": "https://www.google.com/search?q=2023+Jeep+Grand+Cherokee+L+Limited+Audi+Norwood+Norwood+MA",
+   "vdp_url": "https://www.audinorwood.com/inventory/used-2023-jeep-grand-cherokee-l-limited-1C4RJKBG000000001.htm",
    "first_seen_at": 1786705941,
    "first_seen_at_date": "2026-08-14",
    "last_seen_at": 1789297941,
@@ -1695,7 +1737,8 @@
     "zip": "02062",
     "latitude": 42.1945,
     "longitude": -71.1995,
-    "dealer_type": "franchise"
+    "dealer_type": "franchise",
+    "website": "https://www.audinorwood.com"
    }
   }
  ],
@@ -1715,8 +1758,9 @@
    "city": "Norwood",
    "state": "MA",
    "zip": "02062",
-   "url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+Audi+Norwood+cargurus",
-   "id": "cg-1"
+   "url": "https://www.cargurus.com/Cars/inventorylisting/vdp.action?listingId=300007919#listing=300007919",
+   "id": "300007919",
+   "dealerWebsite": "https://www.audinorwood.com"
   },
   {
    "vin": "WA1LXBF7000000007",
@@ -1733,8 +1777,9 @@
    "city": "Westwood",
    "state": "MA",
    "zip": "02090",
-   "url": "https://www.google.com/search?q=2023+Audi+Q7+Premium+Plus+Prime+Audi+Westwood+cargurus",
-   "id": "cg-7"
+   "url": "https://www.cargurus.com/Cars/inventorylisting/vdp.action?listingId=300015838#listing=300015838",
+   "id": "300015838",
+   "dealerWebsite": "https://www.primeaudiwestwood.com"
   },
   {
    "vin": "5UXCR6C0000000003",
@@ -1751,8 +1796,9 @@
    "city": "Bedford",
    "state": "NH",
    "zip": "03110",
-   "url": "https://www.google.com/search?q=2023+BMW+X5+xDrive40i+Ira+Lexus+of+Manchester+cargurus",
-   "id": "cg-3"
+   "url": "https://www.cargurus.com/Cars/inventorylisting/vdp.action?listingId=300023757#listing=300023757",
+   "id": "300023757",
+   "dealerWebsite": "https://www.iralexusofmanchester.com"
   },
   {
    "vin": "YV4062PE000000009",
@@ -1770,8 +1816,9 @@
    "state": "MA",
    "zip": "02062",
    "condition": "Used",
-   "url": "https://www.google.com/search?q=2023+Volvo+XC90+B6+Plus+Volvo+Cars+Norwood+cargurus",
-   "id": "cg-9"
+   "url": "https://www.cargurus.com/Cars/inventorylisting/vdp.action?listingId=300031676#listing=300031676",
+   "id": "300031676",
+   "dealerWebsite": "https://www.volvocarsnorwood.com"
   }
  ],
  "autodev": [
@@ -1793,8 +1840,9 @@
     "city": "Warwick",
     "state": "RI",
     "zip": "02886",
-    "vdp": "https://www.google.com/search?q=2022+Genesis+GV80+2.5T+Advanced+Genesis+of+Warwick",
-    "id": "ad-9"
+    "vdp": "https://www.genesisofwarwick.com/used/2022-genesis-gv80-2-5t-advanced-KMUHBDSB000000009.htm",
+    "id": "ad-9",
+    "dealerWebsite": "https://www.genesisofwarwick.com"
    }
   }
  ]

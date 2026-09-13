@@ -60,7 +60,8 @@ CANDIDATE_DEALER = ("dealerName", "dealer.name", "sellerName", "Dealer", "seller
 CANDIDATE_CITY = ("dealerCity", "dealer.city", "city", "City", "seller.city")
 CANDIDATE_STATE = ("dealerState", "dealer.state", "state", "State", "seller.state", "stateCode")
 CANDIDATE_ZIP = ("dealerZip", "dealer.zip", "zip", "postalCode", "seller.zip")
-CANDIDATE_URL = ("url", "listingUrl", "Listing URL", "link", "vdpUrl")
+CANDIDATE_URL = ("url", "listingUrl", "Listing URL", "link", "vdpUrl", "listingURL", "detailUrl")
+CANDIDATE_DEALER_SITE = ("dealerWebsite", "dealer.website", "sellerWebsite", "dealerUrl")
 CANDIDATE_ID = ("id", "listingId", "listing_id")
 CANDIDATE_DISTANCE = ("distance", "distanceMiles", "distanceFromZip")
 CANDIDATE_CONDITION = ("condition", "inventoryType", "listingType", "vehicleCondition")
@@ -201,6 +202,7 @@ class CarGurusApifySource:
             dealer_city=first_present(raw, *CANDIDATE_CITY),
             dealer_state=str(state).upper()[:2] if state else None,
             dealer_zip=str(zip_code) if zip_code else None,
+            dealer_website=first_present(raw, *CANDIDATE_DEALER_SITE),
             distance_miles=distance,
             listing_url=first_present(raw, *CANDIDATE_URL),
             source_listing_id=str(first_present(raw, *CANDIDATE_ID) or "") or None,

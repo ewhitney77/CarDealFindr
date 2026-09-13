@@ -257,6 +257,7 @@ class DealerGroupSource:
             price=to_int(raw.get("price")), miles=to_int(raw.get("miles")),
             dealer_name=raw.get("dealer") or self.group["name"],
             dealer_city=raw.get("city"), dealer_state=state, dealer_zip=zip_code,
+            dealer_website=self.group["base_url"],
             distance_miles=distance_from_home(None, None, zip_code),
             listing_url=url or page_url,
             raw=raw.get("_raw") or raw,

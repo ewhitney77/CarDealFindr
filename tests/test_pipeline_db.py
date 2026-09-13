@@ -68,8 +68,21 @@ def test_two_runs_persist_history_and_detect_drop(db, tmp_path, monkeypatch):
     tiers = {r["vin"]: r["trim_tier"] for r in db.leaderboard(run2, 100)}
     assert tiers["WA1LXBF7000000007"] == "medium" and tiers["JM3KKDHA000000001"] == "medium"
     assert tiers["5UXCR6C0000000003"] == "low" and tiers["YV4062PE000000004"] == "high"
-    assert html.count("VIN search") >= 25 and ">listing<" in html
-    db.conn.execute("UPDATE observations SET listing_url=NULL")
+    # Links point at real listing pages, never at a search engine.
+    assert "google.com/search" not in html and "bing.com" not in html
+    assert ">Dealer page<" in html and ">CarGurus<" in html
+    links = db.listing_links(run2)
+    # a VIN seen by MarketCheck and CarGurus carries both direct links
+    both = {src for src, _url, _home in links["WA1LXBF7000000001"]}
+    assert both == {"marketcheck", "cargurus_apify"}
+    assert all(url.startswith("http") for entries in links.values() for _s, url, _h in entries)
+    # the fixture listing with no URL and no dealer site falls back to a plain note
+    assert links.get("KMUHBDSB000000001") in (None, [])
+    assert "no direct link" in open(build_report(db, run2, top_n=100)).read()
+    # dealer home page is used only when that source gave no vehicle page
+    db.conn.execute("UPDATE observations SET listing_url=NULL, dealer_website='https://example-dealer.com' "
+                    "WHERE vin='WA1LXBF7000000002'")
     db.conn.commit()
-    html2 = open(build_report(db, run2, top_n=25)).read()
-    assert "no listing URL" in html2 and html2.count("VIN search") >= 25
+    entries = db.listing_links(run2)["WA1LXBF7000000002"]
+    assert entries and all(is_home for _s, _u, is_home in entries)
+    assert "site</a>" in open(build_report(db, run2, top_n=25)).read()

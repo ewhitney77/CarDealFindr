@@ -58,6 +58,7 @@ class Listing:
     dealer_zip: Optional[str] = None
     dealer_lat: Optional[float] = None
     dealer_lon: Optional[float] = None
+    dealer_website: Optional[str] = None   # dealership home page, last-resort link target
     distance_miles: Optional[float] = None
 
     # ---- links & provenance ----

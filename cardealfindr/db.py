@@ -90,8 +90,9 @@ CREATE TABLE IF NOT EXISTS observations (
     dealer_zip          TEXT,
     dealer_lat          REAL,
     dealer_lon          REAL,
+    dealer_website      TEXT,
     distance_miles      REAL,
-    listing_url         TEXT,
+    listing_url         TEXT,            -- direct link to THIS car on the source's site
     source_listing_id   TEXT,
     source_first_seen_at TEXT,             -- when the SOURCE first saw the listing
     raw_json            TEXT
@@ -213,6 +214,10 @@ class Database:
             cols = {r["name"] for r in self.conn.execute("PRAGMA table_info(vehicles)")}
             if "trim_tier" not in cols:
                 self.conn.execute("ALTER TABLE vehicles ADD COLUMN trim_tier TEXT")
+        if "observations" in tables:
+            cols = {r["name"] for r in self.conn.execute("PRAGMA table_info(observations)")}
+            if "dealer_website" not in cols:
+                self.conn.execute("ALTER TABLE observations ADD COLUMN dealer_website TEXT")
 
     def close(self) -> None:
         self.conn.close()
@@ -303,13 +308,14 @@ class Database:
             INSERT INTO observations (run_id, vin, source, observed_at, price, msrp, miles,
                 days_on_market, source_prior_price, source_price_change_pct, imv, deal_rating,
                 dealer_name, dealer_city, dealer_state, dealer_zip, dealer_lat, dealer_lon,
-                distance_miles, listing_url, source_listing_id, source_first_seen_at, raw_json)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                dealer_website, distance_miles, listing_url, source_listing_id,
+                source_first_seen_at, raw_json)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """,
             (run_id, lst.vin, lst.source, observed_at, lst.price, lst.msrp, lst.miles,
              lst.days_on_market, lst.source_prior_price, lst.source_price_change_pct, lst.imv,
              lst.deal_rating, lst.dealer_name, lst.dealer_city, lst.dealer_state, lst.dealer_zip,
-             lst.dealer_lat, lst.dealer_lon, lst.distance_miles, lst.listing_url,
+             lst.dealer_lat, lst.dealer_lon, lst.dealer_website, lst.distance_miles, lst.listing_url,
              lst.source_listing_id, lst.first_seen_at,
              json.dumps(lst.raw, default=str)[:200_000] if lst.raw else None))
 
@@ -387,6 +393,37 @@ class Database:
             WHERE c.run_id = ? AND c.change_amount < 0
             ORDER BY c.change_amount ASC
             """, (run_id,)).fetchall()
+
+    def listing_links(self, run_id: int) -> dict[str, list[tuple[str, str, bool]]]:
+        """
+        Every DIRECT link we hold for each VIN in this run:
+            {vin: [(source, url, is_dealer_home_page), ...]}
+        A VIN seen by both MarketCheck and CarGurus gets both links, so you can
+        open the dealer's own page and the CarGurus page for the same car.
+        Dealer home pages are only included when that source gave no listing URL.
+        """
+        rows = self.conn.execute(
+            """
+            SELECT DISTINCT o.vin, o.source, o.listing_url, o.dealer_website
+            FROM observations o
+            JOIN scores s ON s.run_id = o.run_id AND s.vin = o.vin
+            WHERE o.run_id = ?
+            ORDER BY o.vin, o.source
+            """, (run_id,)).fetchall()
+        out: dict[str, list[tuple[str, str, bool]]] = {}
+        for r in rows:
+            bucket = out.setdefault(r["vin"], [])
+            url = r["listing_url"]
+            if url and str(url).startswith("http"):
+                if not any(u == url for _s, u, _h in bucket):
+                    bucket.append((r["source"], url, False))
+            elif r["dealer_website"] and str(r["dealer_website"]).startswith("http"):
+                bucket.append((r["source"], r["dealer_website"], True))
+        # Drop dealer home pages for any VIN that has at least one real listing link.
+        for vin, bucket in out.items():
+            if any(not is_home for _s, _u, is_home in bucket):
+                out[vin] = [b for b in bucket if not b[2]]
+        return out
 
     def vin_timeline(self, vin: str) -> list[sqlite3.Row]:
         return self.conn.execute(

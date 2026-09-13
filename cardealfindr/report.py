@@ -61,6 +61,9 @@ td.num { text-align:right; font-variant-numeric:tabular-nums; }
 .t-high { background:#fbefff; color:#8250df; } .t-unknown { background:#f6f8fa; color:#8c959f; border-color:#d0d7de; }
 .vin { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--muted); user-select:all; }
 .links { margin-top:3px; font-size:12px; } .links a { margin-right:8px; font-weight:600; }
+.links a.home { color:var(--muted); font-weight:500; }
+.demo { background:#fff8c5; border:1px solid #d4a72c; color:#7d4e00; border-radius:8px;
+        padding:10px 14px; margin:0 0 16px; font-size:13px; }
 td.flags { white-space:normal; min-width:120px; }
 .lbl-great { color:var(--good); font-weight:700; } .lbl-good { color:var(--good); }
 .lbl-verify { color:var(--warn); font-weight:700; } .lbl-above { color:var(--bad); }
@@ -126,24 +129,49 @@ def _tier_sort(tier) -> int:
     return config.TRIM_TIER_ORDER.index(tier) if tier in config.TRIM_TIER_ORDER else -1
 
 
-def _vin_search_url(vin: str) -> str:
-    return f"https://www.google.com/search?q={_esc(vin)}"
+# How each source's link is labelled in the report. MarketCheck's vdp_url and
+# the dealer scrapers point at the dealership's own page for that exact car;
+# CarGurus and Auto.dev point at their own listing page for it.
+SOURCE_LINK_LABEL = {
+    "marketcheck": "Dealer page",
+    "cargurus_apify": "CarGurus",
+    "autodev": "Auto.dev",
+}
 
 
-def _links(row) -> str:
+def _source_label(source: str) -> str:
+    if source.startswith("dealer:"):
+        key = source.split(":", 1)[1]
+        for g in config.DEALER_GROUPS:
+            if g["key"] == key:
+                return g["name"]
+        return key.replace("_", " ").title()
+    return SOURCE_LINK_LABEL.get(source, source)
+
+
+def _links(row, links_by_vin: dict) -> str:
     """
-    Always give the reader something clickable:
-      * the listing URL the source reported (dealer VDP / CarGurus page)
-      * a VIN web search as a fallback and as a cross-check
+    Direct links to the car, one per source that gave us a URL.
+
+    Nothing here is a search page: every link goes to a specific vehicle
+    detail page. A VIN seen by both MarketCheck and CarGurus shows both, so
+    you can open the dealer's own listing and the CarGurus page side by side.
+    If no source gave a URL, we say so rather than sending you to a search.
     """
+    entries = links_by_vin.get(row["vin"], [])
+    if not entries:
+        return ('<div class="links"><span class="muted" title="no source returned a URL for this VIN; '
+                'look it up on the dealer\'s site by VIN">no direct link</span></div>')
     parts = []
-    url = row["listing_url"]
-    if url:
-        parts.append(f'<a href="{_esc(url)}" target="_blank" rel="noopener" title="{_esc(url)}">listing</a>')
-    else:
-        parts.append('<span class="muted" title="source gave no listing URL">no listing URL</span>')
-    parts.append(f'<a href="{_vin_search_url(row["vin"])}" target="_blank" rel="noopener" '
-                 f'title="search the web for this VIN">VIN search</a>')
+    for source, url, is_home in entries:
+        label = _source_label(source)
+        if is_home:
+            parts.append(f'<a href="{_esc(url)}" target="_blank" rel="noopener" class="home" '
+                         f'title="{_esc(source)} gave no page for this car; this is the dealership site">'
+                         f'{_esc(label)} site</a>')
+        else:
+            parts.append(f'<a href="{_esc(url)}" target="_blank" rel="noopener" '
+                         f'title="{_esc(url)}">{_esc(label)}</a>')
     return '<div class="links">' + "".join(parts) + "</div>"
 
 
@@ -184,7 +212,7 @@ def _bars(row) -> str:
     return '<div class="bars">' + "".join(parts) + "</div>"
 
 
-def _top_table(rows) -> str:
+def _top_table(rows, links_by_vin: dict) -> str:
     head = ("<tr><th>#</th><th>Score</th><th>Verdict</th><th>Vehicle &amp; links</th><th>Trim</th><th>Price</th>"
             "<th>Δ vs basis</th><th>Miles</th><th>Dealer</th><th>Dist (mi)</th><th>Days listed</th>"
             "<th>Flags</th></tr>")
@@ -207,7 +235,7 @@ def _top_table(rows) -> str:
             f'<td data-v="{r["total_score"]}"><span class="score" title="{comp}">{r["total_score"]:.1f}</span>{_bars(r)}</td>'
             f"<td>{_label(r)}</td>"
             f'<td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<span class="badge b-{cond}">{cond.upper()}</span><br><span class="vin">{_esc(r["vin"])}</span>{_links(r)}</td>'
+            f'<span class="badge b-{cond}">{cond.upper()}</span><br><span class="vin">{_esc(r["vin"])}</span>{_links(r, links_by_vin)}</td>'
             f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num" data-v="{r["price"]}">{_money(r["price"])}{drop}</td>'
             f'<td data-v="{d if d is not None else 999}"><span class="{delta_cls}">{delta_txt}</span>'
@@ -224,7 +252,7 @@ def _top_table(rows) -> str:
     return f'<div class="tablewrap"><table class="sortable"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
 
 
-def _drops_table(rows) -> str:
+def _drops_table(rows, links_by_vin: dict) -> str:
     if not rows:
         return '<p class="muted">No price drops since the previous run (or this is the first run).</p>'
     head = ("<tr><th>Vehicle &amp; links</th><th>Trim</th><th>Was</th><th>Now</th><th>Change</th><th>Previous run</th>"
@@ -234,7 +262,7 @@ def _drops_table(rows) -> str:
         prev = (r["prev_run_started_at"] or "")[:10]
         body.append(
             f'<tr><td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<small>{(r["miles"] or 0):,} mi</small><br><span class="vin">{_esc(r["vin"])}</span>{_links(r)}</td>'
+            f'<small>{(r["miles"] or 0):,} mi</small><br><span class="vin">{_esc(r["vin"])}</span>{_links(r, links_by_vin)}</td>'
             f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num">{_money(r["prev_price"])}</td><td class="num">{_money(r["price"])}</td>'
             f'<td class="num delta-neg" data-v="{r["change_amount"]}">{_money(r["change_amount"])} ({r["change_pct"]:+.1f}%)</td>'
@@ -252,6 +280,7 @@ def build_report(db: Database, run_id: int, top_n: int = config.REPORT_TOP_N,
         raise ValueError(f"run {run_id} does not exist")
     rows = db.leaderboard(run_id, top_n)
     drops = db.price_drops_for_run(run_id)
+    links_by_vin = db.listing_links(run_id)
     rejections = json.loads(run["rejections_json"] or "{}")
     notes = json.loads(run["notes"] or "{}")
     per_source = notes.get("per_source", {})
@@ -262,12 +291,19 @@ def build_report(db: Database, run_id: int, top_n: int = config.REPORT_TOP_N,
     src_rows = "".join(f"<tr><td>{_esc(k)}</td><td class='num'>{v}</td></tr>" for k, v in per_source.items())
     weights = " · ".join(f"{k} {v}" for k, v in config.SCORE_WEIGHTS.items())
     started = (run["started_at"] or "").replace("T", " ").replace("Z", " UTC")
+    demo_banner = ""
+    if (run["sources"] or "") == "fixture":
+        demo_banner = ('<p class="demo"><b>Demo data.</b> This run used the offline sample file, not a real '
+                       'search. The cars, dealers and links are invented, so the links will not open a real '
+                       'listing. Run <code>python cardealfindr.py run</code> with your API keys for live '
+                       'listings and working links.</p>')
 
     doc = f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CarDealFindr · run {run_id}</title><style>{CSS}</style></head>
 <body>
 <h1>CarDealFindr — 3-row SUV deals within {config.SEARCH_RADIUS_MILES} mi of {config.HOME_ZIP}</h1>
+{demo_banner}
 <p class="sub">Run {run_id} · {started} · sources: {_esc(run["sources"])} · budget ≤ {_money(config.BUDGET_CAP)} · miles ≤ {config.MILEAGE_HARD_CAP:,} · used {config.USED_YEAR_MIN}–{config.USED_YEAR_MAX}</p>
 
 <div class="cards">
@@ -283,12 +319,13 @@ price · mileage · days-on-market · price-drop · distance. <b>Verify this</b>
 IMV/median: usually accident history, a mis-listed trim, or a bait price — check before getting excited.
 Red mileage = over {config.MILEAGE_PREFERRED_MAX:,} mi (allowed, not preferred).
 Trim tier LOW / MID / HIGH comes from the ladders in <code>config.TRIM_LADDERS</code>; "?" means the trim string
-matched nothing on the ladder. <b>Links</b>: "listing" is the URL the source reported; "VIN search" always works.
+matched nothing on the ladder. <b>Links</b> go straight to that exact car: "Dealer page" is the dealership's own listing, "CarGurus" and
+"Auto.dev" are those sites' pages for the same VIN. A car found by several sources shows several links.
 If links do not respond inside a preview pane, open the file directly in your browser.</p>
-{_top_table(rows)}
+{_top_table(rows, links_by_vin)}
 
 <h2>Price drops since the previous run</h2>
-{_drops_table(drops)}
+{_drops_table(drops, links_by_vin)}
 
 <h2>Run summary</h2>
 <div class="cards">
