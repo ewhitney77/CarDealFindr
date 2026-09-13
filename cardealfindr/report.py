@@ -40,7 +40,7 @@ h1 { font-size:22px; margin:0 0 4px; } h2 { font-size:17px; margin:32px 0 10px; 
 .card { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-width:140px; }
 .card b { display:block; font-size:20px; } .card span { color:var(--muted); font-size:12px; }
 .tablewrap { overflow-x:auto; border:1px solid var(--line); border-radius:8px; }
-table { border-collapse:collapse; width:100%; min-width:1100px; }
+table { border-collapse:collapse; width:100%; min-width:960px; }
 th, td { padding:8px 9px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; white-space:nowrap; }
 th { background:var(--soft); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; }
 th.sorted-asc::after { content:" \\25B2"; } th.sorted-desc::after { content:" \\25BC"; }
@@ -60,7 +60,8 @@ td.num { text-align:right; font-variant-numeric:tabular-nums; }
 .t-low { background:#eaeef2; color:#424a53; } .t-medium { background:#ddf4ff; color:#0550ae; }
 .t-high { background:#fbefff; color:#8250df; } .t-unknown { background:#f6f8fa; color:#8c959f; border-color:#d0d7de; }
 .vin { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--muted); user-select:all; }
-.links a { display:block; }
+.links { margin-top:3px; font-size:12px; } .links a { margin-right:8px; font-weight:600; }
+td.flags { white-space:normal; min-width:120px; }
 .lbl-great { color:var(--good); font-weight:700; } .lbl-good { color:var(--good); }
 .lbl-verify { color:var(--warn); font-weight:700; } .lbl-above { color:var(--bad); }
 .delta-neg { color:var(--good); } .delta-pos { color:var(--bad); }
@@ -184,9 +185,9 @@ def _bars(row) -> str:
 
 
 def _top_table(rows) -> str:
-    head = ("<tr><th>#</th><th>Score</th><th>Verdict</th><th>Vehicle</th><th>Trim</th><th>Price</th>"
+    head = ("<tr><th>#</th><th>Score</th><th>Verdict</th><th>Vehicle &amp; links</th><th>Trim</th><th>Price</th>"
             "<th>Δ vs basis</th><th>Miles</th><th>Dealer</th><th>Dist (mi)</th><th>Days listed</th>"
-            "<th>Flags</th><th>Links</th></tr>")
+            "<th>Flags</th></tr>")
     body = []
     for r in rows:
         cond = r["condition"] or "used"
@@ -206,7 +207,7 @@ def _top_table(rows) -> str:
             f'<td data-v="{r["total_score"]}"><span class="score" title="{comp}">{r["total_score"]:.1f}</span>{_bars(r)}</td>'
             f"<td>{_label(r)}</td>"
             f'<td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<span class="badge b-{cond}">{cond.upper()}</span><br><span class="vin">{_esc(r["vin"])}</span></td>'
+            f'<span class="badge b-{cond}">{cond.upper()}</span><br><span class="vin">{_esc(r["vin"])}</span>{_links(r)}</td>'
             f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num" data-v="{r["price"]}">{_money(r["price"])}{drop}</td>'
             f'<td data-v="{d if d is not None else 999}"><span class="{delta_cls}">{delta_txt}</span>'
@@ -218,8 +219,7 @@ def _top_table(rows) -> str:
             f'{r["distance_miles"] if r["distance_miles"] is not None else "?"}</td>'
             f'<td class="num" data-v="{r["days_on_market"] if r["days_on_market"] is not None else -1}">'
             f'{r["days_on_market"] if r["days_on_market"] is not None else "?"}</td>'
-            f"<td>{_badges(r['flags'])}</td>"
-            f"<td>{_links(r)}</td>"
+            f'<td class="flags">{_badges(r["flags"])}</td>'
             f"</tr>")
     return f'<div class="tablewrap"><table class="sortable"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
 
@@ -227,21 +227,21 @@ def _top_table(rows) -> str:
 def _drops_table(rows) -> str:
     if not rows:
         return '<p class="muted">No price drops since the previous run (or this is the first run).</p>'
-    head = ("<tr><th>Vehicle</th><th>Trim</th><th>Was</th><th>Now</th><th>Change</th><th>Previous run</th>"
-            "<th>Dealer</th><th>Rank now</th><th>Links</th></tr>")
+    head = ("<tr><th>Vehicle &amp; links</th><th>Trim</th><th>Was</th><th>Now</th><th>Change</th><th>Previous run</th>"
+            "<th>Dealer</th><th>Rank now</th></tr>")
     body = []
     for r in rows:
         prev = (r["prev_run_started_at"] or "")[:10]
         body.append(
             f'<tr><td class="veh"><b>{_esc(r["year"])} {_esc(r["make"])} {_esc(r["model"])}</b>'
-            f'<small>{(r["miles"] or 0):,} mi</small><br><span class="vin">{_esc(r["vin"])}</span></td>'
+            f'<small>{(r["miles"] or 0):,} mi</small><br><span class="vin">{_esc(r["vin"])}</span>{_links(r)}</td>'
             f'<td data-v="{_tier_sort(r["trim_tier"])}">{_tier_badge(r["trim_tier"])} {_esc(r["trim"] or "—")}</td>'
             f'<td class="num">{_money(r["prev_price"])}</td><td class="num">{_money(r["price"])}</td>'
             f'<td class="num delta-neg" data-v="{r["change_amount"]}">{_money(r["change_amount"])} ({r["change_pct"]:+.1f}%)</td>'
             f'<td>run {r["prev_run_id"]} · {prev}</td>'
             f'<td>{_esc(r["dealer_name"])}<br><small class="muted">{_esc(r["dealer_city"] or "")}'
             f'{", " + _esc(r["dealer_state"]) if r["dealer_state"] else ""}</small></td>'
-            f'<td class="num">{r["rank"] if r["rank"] else "—"}</td><td>{_links(r)}</td></tr>')
+            f'<td class="num">{r["rank"] if r["rank"] else "—"}</td></tr>')
     return f'<div class="tablewrap"><table class="sortable"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
 
 
